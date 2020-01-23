@@ -87,9 +87,8 @@ public class Tampilan extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addComponent(btnPreprocessing))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(101, Short.MAX_VALUE))
@@ -109,7 +108,8 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void btnPreprocessingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreprocessingActionPerformed
         // TODO add your handling code here:
-        jLabel2.setIcon(gambar.Proses());
+        gambar.Proses();
+        jLabel2.setIcon(gambar.ScaleResultIcon);
         jTextArea1.setText(Arrays.toString(gambar.hasilEkstraksi));
     }//GEN-LAST:event_btnPreprocessingActionPerformed
 
