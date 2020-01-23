@@ -25,36 +25,36 @@ public class Preprocessing {
         return resized;
     }
     
-    public BufferedImage Biner(BufferedImage img){ 
-        long tWidth=img.getWidth(); long tHeight=img.getHeight();
-        long x,y;
-        int RGB,Red,Green,Blue,Gray;
-        Color tWarna;
-        BufferedImage resultImg=img;
-        for(x=0;x<tWidth;x++)
-        {
-            for(y=0;y<tHeight;y++)
-            {
-                RGB=img.getRGB((int)x, (int)y);
-                tWarna=new Color(RGB);
-                Red=tWarna.getRed();
-                Green=tWarna.getGreen();
-                Blue=tWarna.getBlue();
-                Gray=(Red+Green+Blue)/3;
-                if (Gray<=128)
-                {
-                   Gray=0;
-                }
-                else
-                {
-                    Gray=255;
-                }
-                tWarna=new Color(Gray,Gray,Gray);
-                resultImg.setRGB((int)x, (int)y, tWarna.getRGB());
-            }
-        }
-        return resultImg;
-    }
+//    public BufferedImage Biner(BufferedImage img){ 
+//        long tWidth=img.getWidth(); long tHeight=img.getHeight();
+//        long x,y;
+//        int RGB,Red,Green,Blue,Gray;
+//        Color tWarna;
+//        BufferedImage resultImg=img;
+//        for(x=0;x<tWidth;x++)
+//        {
+//            for(y=0;y<tHeight;y++)
+//            {
+//                RGB=img.getRGB((int)x, (int)y);
+//                tWarna=new Color(RGB);
+//                Red=tWarna.getRed();
+//                Green=tWarna.getGreen();
+//                Blue=tWarna.getBlue();
+//                Gray=(Red+Green+Blue)/3;
+//                if (Gray<=128)
+//                {
+//                   Gray=0;
+//                }
+//                else
+//                {
+//                    Gray=255;
+//                }
+//                tWarna=new Color(Gray,Gray,Gray);
+//                resultImg.setRGB((int)x, (int)y, tWarna.getRGB());
+//            }
+//        }
+//        return resultImg;
+//    }
     
     public int[][] getPixels(BufferedImage img){
         long tWidth=img.getWidth(); 
