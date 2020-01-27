@@ -5,6 +5,7 @@
  */
 package com.mycompany.jst;
 
+import com.mycompany.jst.Backpro.BP;
 import com.mycompany.jst.LVQ.LVQ;
 import java.util.Arrays;
 import javax.swing.JFileChooser;
@@ -38,6 +39,14 @@ public class Tampilan extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        btn_lvq = new javax.swing.JButton();
+        tf_hasil = new javax.swing.JTextField();
+        bt_backpro = new javax.swing.JButton();
+        tf_backpro = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        tf_alpha = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        tf_hiddenLayer = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,6 +68,24 @@ public class Tampilan extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
+        btn_lvq.setText("LVQ");
+        btn_lvq.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_lvqActionPerformed(evt);
+            }
+        });
+
+        bt_backpro.setText("Backprop");
+        bt_backpro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_backproActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Laju Pembelajaran");
+
+        jLabel4.setText("Layer Tersembunyi");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -68,15 +95,36 @@ public class Tampilan extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnPilih)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnPreprocessing)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnPilih))
-                        .addGap(0, 137, Short.MAX_VALUE)))
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tf_alpha))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(btn_lvq)
+                                .addGap(28, 28, 28)
+                                .addComponent(tf_hasil, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(bt_backpro)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tf_backpro))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tf_hiddenLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 79, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -90,12 +138,25 @@ public class Tampilan extends javax.swing.JFrame {
                         .addComponent(btnPreprocessing))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(80, 80, 80))
+                .addGap(45, 45, 45)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(tf_alpha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(tf_hiddenLayer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_lvq)
+                    .addComponent(tf_hasil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bt_backpro)
+                    .addComponent(tf_backpro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33))
         );
 
         pack();
@@ -116,6 +177,26 @@ public class Tampilan extends javax.swing.JFrame {
         jLabel2.setIcon(gambar.ScaleResultIcon);
         jTextArea1.setText(Arrays.toString(gambar.hasilEkstraksi));
     }//GEN-LAST:event_btnPreprocessingActionPerformed
+
+    private void btn_lvqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_lvqActionPerformed
+        // TODO add your handling code here:
+        double[] uji = gambar.hasilEkstraksi;
+        LVQ l = new LVQ();
+        l.setAlpha(Double.valueOf(tf_alpha.getText()));
+        l.train();
+        tf_hasil.setText(l.getHasil(uji));
+    }//GEN-LAST:event_btn_lvqActionPerformed
+
+    private void bt_backproActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_backproActionPerformed
+        // TODO add your handling code here:
+        BP b = new BP();
+        b.setAlfa(Double.valueOf(tf_alpha.getText()));
+        b.setUnit_hidden(Integer.valueOf(tf_hiddenLayer.getText()));
+        b.init_static();
+        b.learn_static();
+        b.test(gambar.hasilEkstraksi);
+        tf_backpro.setText(b.kesimpulan());
+    }//GEN-LAST:event_bt_backproActionPerformed
 
     /**
      * @param args the command line arguments
@@ -153,11 +234,19 @@ public class Tampilan extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bt_backpro;
     private javax.swing.JButton btnPilih;
     private javax.swing.JButton btnPreprocessing;
+    private javax.swing.JButton btn_lvq;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField tf_alpha;
+    private javax.swing.JTextField tf_backpro;
+    private javax.swing.JTextField tf_hasil;
+    private javax.swing.JTextField tf_hiddenLayer;
     // End of variables declaration//GEN-END:variables
 }

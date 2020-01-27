@@ -5,6 +5,8 @@
  */
 package com.mycompany.jst.LVQ;
 
+import java.util.Arrays;
+
 /**
  *
  * @author afif
@@ -15,7 +17,7 @@ public class LVQ {
     int epoch;
     double alpha;
     double lastAlpha;
-    double perubahanAlpha;
+    double perubahanAlpha=0.5;
     double[][] bobot = new double[40][100];
     String[] hasilUji = new String[40];
 
@@ -53,6 +55,7 @@ public class LVQ {
             pemenang = getPemenang();
             kelas[pemenang].setT(a+1);
             kelas[pemenang].update();
+            //System.out.println(Arrays.toString(kelas[pemenang].getW()));
         }
 
         //Mengurangi Learning Rate
@@ -60,7 +63,7 @@ public class LVQ {
             kela.reduceAlpha();
         }
 
-        while(lastAlpha >= 4.0E-32){
+        while(epoch < 1000){
             for(int a=0; a<80; a++){
                 for (Node kela : kelas) {
                     kela.setX(pola[a]);
@@ -68,11 +71,10 @@ public class LVQ {
                 for(int i=0; i<kelas.length;i++){
                     besar[i] = kelas[i].getBesar();
                 }
-
+                
                 pemenang = getPemenang();
                 kelas[pemenang].setT((a%40)+1);
                 kelas[pemenang].update();
-
             }
 
             //Mengurangi Learning Rate
@@ -83,6 +85,7 @@ public class LVQ {
 
             epoch++;
         }
+        
     }
 
 
@@ -104,77 +107,85 @@ public class LVQ {
             hasil = "Tidak Dikenali";
         }else{
             if(pemenang == 0){
-                hasil = "Hotel";
+                hasil = "Adam";
             }else if (pemenang == 1){
-                hasil = "Bandara";
+                hasil = "Ahmad";
             }else if (pemenang == 2){
-                hasil = "Disabilitas";
+                hasil = "Ais";
             }else if (pemenang == 3){
-                hasil = "Stadion";
+                hasil = "Arif";
             }else if (pemenang == 4){
-                hasil = "Keberangkatan Pesawat";
+                hasil = "Ayuk";
             }else if (pemenang == 5){
-                hasil = "Pengawasan Kamera";
+                hasil = "Bayu";
             }else if (pemenang == 6){
-                hasil = "Pom Bensin";
+                hasil = "Beni";
             }else if (pemenang == 7){
-                hasil = "Restoran";
+                hasil = "Cici";
             }else if (pemenang == 8){
-                hasil = "Toliet Pria";
+                hasil = "Dani";
             }else if (pemenang == 9){
-                hasil = "Toilet Wanita";
+                hasil = "Dian";
             }else if (pemenang == 10){
-                hasil = "Salon";
+                hasil = "Doni";
             }else if (pemenang == 11){
-                hasil = "Pasar";
+                hasil = "Fahrul";
             }else if (pemenang == 12){
-                hasil = "Museum";
+                hasil = "Hani";
             }else if (pemenang == 13){
-                hasil = "Kemah";
+                hasil = "Hanum";
             }else if (pemenang == 14){
-                hasil = "Kafe";
+                hasil = "Heri";
             }else if (pemenang == 15){
-                hasil = "Eskalator";
+                hasil = "Iis";
             }else if (pemenang == 16){
-                hasil = "Bus";
+                hasil = "Ila";
             }else if (pemenang == 17){
-                hasil = "Tunggu";
+                hasil = "Irfan";
             }else if (pemenang == 18){
-                hasil = "Loket/Resepsionis";
+                hasil = "Maman";
             }else if (pemenang == 19){
-                hasil = "Penukaran Uang";
+                hasil = "Mar";
             }else if (pemenang == 20){
-                hasil = "Parkir Sepeda";
+                hasil = "Maya";
             }else if (pemenang == 21){
-                hasil = "Informasi";
+                hasil = "Muftia";
             }else if (pemenang == 22){
-                hasil = "Petunjuk Arah";
+                hasil = "Nafi";
             }else if (pemenang == 23){
-                hasil = "ATM";
+                hasil = "Nisa";
             }else if (pemenang == 24){
-                hasil = "Ruang Rapat";
+                hasil = "Oki";
             }else if (pemenang == 25){
-                hasil = "Penitipan Barang";
+                hasil = "Ozi";
             }else if (pemenang == 26){
-                hasil = "Daur Ulang";
+                hasil = "Ratih";
             }else if (pemenang == 27){
-                hasil = "Telepon";
+                hasil = "Rian";
             }else if (pemenang == 28){
-                hasil = "Taksi";
+                hasil = "Riko";
             }else if (pemenang == 29){
-                hasil = "Pos Surat";
+                hasil = "Rio";
             }else if (pemenang == 30){
-                hasil = "Parkir Mobil";
+                hasil = "Rotul";
             }else if (pemenang == 31){
-                hasil = "Pemeriksaan Barang";
+                hasil = "Sopyan";
             }else if (pemenang == 32){
-                hasil = "Area Merokok";
+                hasil = "Susi";
             }else if (pemenang == 33){
-                hasil = "Toilet Unisex";
+                hasil = "Tami";
             }else if (pemenang == 34){
-                hasil = "Kafetaria/Bar";
+                hasil = "Tyas";
             }else if (pemenang == 35){
-                hasil = "Helikopter";
+                hasil = "Wina";
+            }else if (pemenang == 36){
+                hasil = "Yani";
+            }else if (pemenang == 37){
+                hasil = "Yuni";
+            }else if (pemenang == 38){
+                hasil = "Zila";
+            }else if (pemenang == 39){
+                hasil = "Ziya";
             }
         }
 
