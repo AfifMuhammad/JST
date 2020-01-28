@@ -6,358 +6,268 @@
 package com.mycompany.jst.Backpro;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
 
 /**
  *
  * @author macbook
  */
 public class BP {
-    // kondisi
-    double x[][];
-    // target
-    double t[];
-    
-    int unit_input;
-    int unit_hidden;
-    int unit_output;
-    
-    // learning rate
-    double alfa;
-    // maximum loop
-    int maxloop;
-    // target error
-    double ERR;
-    // last error
-    double ERX;
-    
-    // bobot input - hidden
-    double v[][];
-    // bobot bias - hidden 
-    double v0[];
-    // bobot hidden - ouput
-    double w[][];
-    // bobot bias - output
-    double w0[];
-    
-    double MSE;
-    
-    int loop;
-    double hasil_mentah;
-    public double hasil_akhir;
-    
-    public void init_static(){
-        //double init_x[][] = {{0.5,1},{1,0.5},{1,1},{0.5,0.5}};
-        //double init_t[] = {1,1,0.5,0.5};
-        //double init_x[][] = {{-1,0,0,0},{-1,0,0,1},{-1,0,1,0},{-1,0,1,1},{-1,1,0,0},{-1,1,0,1},{-1,1,1,0},{-1,1,1,1},{ 0,0,0,0},{ 0,0,0,1},{ 0,0,1,0},{ 0,0,1,1},{ 0,1,0,0},{ 0,1,0,1},{ 0,1,1,0},{ 0,1,1,1},{ 1,0,0,0},{ 1,0,0,1},{ 1,0,1,0},{ 1,0,1,1},{ 1,1,0,0},{ 1,1,0,1},{ 1,1,1,0},{ 1,1,1,1}};
-        //double init_t[] = {1, 0, 1,-1, 1, 0, 1,-1, 1, 0, 1,-1, 1, 0, 1, 1, 1, 1, 1,-1, 1, 0, 1, 1};
-        double init_x[][] = Data.pola;
-        double init_t[] = {0.0,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1,0.0,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1};
-        int init_uinput = init_x[0].length;
-        int init_uhidden = unit_hidden;
-        int init_uoutput = 1;
-        double init_alfa = alfa;
-        int init_maxloop = 10000;
-        double init_ERR = 0.01;
-        //double init_v[][] = {{0.9562,0.7762,0.1623,0.2886},{0.1962,0.6133,0.0311,0.9711}};
-        double init_v[][] = new double[init_uinput][init_uhidden];
-        for(int a=0; a<init_v.length; a++){
-            for(int b=0; b<init_v[0].length; b++){
-                init_v[a][b] = Math.random();
-            }
-        }
-        //double init_v0[] = {0.7496,0.3796,0.7256,0.1628};
-        double init_v0[] = new double[init_uhidden];
-        for(int a=0; a<init_v0.length; a++){
-            init_v0[a] = Math.random();
-        }
-        //double init_w[][] = {{0.2280,0.9585,0.6799,0.0550}};
-        double init_w[][] = new double[init_uoutput][init_uhidden];
-        for(int a=0; a<init_w.length; a++){
-            for(int b=0; b<init_w[0].length; b++){
-                init_w[a][b] = Math.random();
-            }
-        }
-        //double init_w0[] = {0.9505};
-        double init_w0[] = new double[init_uoutput];
-        for(int a=0; a<init_w0.length; a++){
-            init_w0[a] = Math.random();
-        }
-        
-        this.x = init_x;
-        this.t = init_t;
-        this.unit_input = init_uinput;
-        this.unit_hidden = init_uhidden;
-        this.unit_output = init_uoutput;
-        this.alfa = init_alfa;
-        this.maxloop = init_maxloop;
-        this.ERR = init_ERR;
-        this.v = init_v;
-        this.v0 = init_v0;
-        this.w = init_w;
-        this.w0 = init_w0;
-    }
-    
-    
-    
-    public void learn_static(){
-        double data[][] = this.x;
-        double target[] = this.t;
-        int jumlah_data = data.length;
-        int jumlah_input = this.unit_input;
-        int jumlah_hidden = this.unit_hidden;
-        int jumlah_output = this.unit_output;
-        // do it for learn
-        int loop = 0;
-        //this.maxloop = 1000;
-        //System.out.println(jumlah_hidden);
-        //System.out.println(this.v0.length);
-        //System.exit(0);
-        
-        do{
-            //System.out.println("Loop : "+loop);
-            //System.out.println("-----------");
-            // for all data
-            for(int h=0; h<jumlah_data; h++){
-                // hitung z_in dan z
-                double z[] = new double[jumlah_hidden];
-                for(int j=0; j<jumlah_hidden; j++){
-                    //itung sigma xi vij
-                    double z_in[] = new double[jumlah_hidden];
-                    double jum_xv=0;
-                    for(int i=0; i<jumlah_input; i++){
-                        double tmp=x[h][i]*v[i][j];
-                        jum_xv=jum_xv+tmp;
-                    }
-                    z_in[j] = v0[j]+jum_xv;
-                    z[j] = aktivasi(z_in[j]);
-                    //z[j] = 1/(1+(double)Math.exp(-z_in[j]));
-                    //z[j] = (1-(double)Math.exp(-z_in[j]))/(1+(double)Math.exp(-z_in[j]));
-                  //  System.out.println("z["+j+"] = "+z[j]);
-                }
-                
-                //~ itung y_in dan y     (output)
-                double y[] = new double[jumlah_output];
-                for(int k=0; k<jumlah_output; k++){
-                    double y_in[] = new double[y.length];
-                    double jum_zw=0;
-                    for(int j=0; j<jumlah_hidden; j++){
-                        double tmp=z[j]*w[k][j];
-                        jum_zw=jum_zw+tmp;
-                    }
-                    y_in[k]=w0[k]+jum_zw;
-                    y[k] = aktivasi(y_in[k]);
-                    //y[k]=1/(1+(double)Math.exp(-y_in[k]));
-                    //y[k]=(1-(double)Math.exp(-y_in[k]))/(1+(double)Math.exp(-y_in[k]));
-                    //System.out.println("Math.exp("+-y_in[k]+") = "+Math.exp(-y_in[k]));
-                    //System.out.println("y["+k+"] = "+y[k]);
-                }
-                
-                // hitung MSE
-                double sum_e = 0;
-                double Err_y[] = new double[jumlah_output];
-                for(int k=0; k<jumlah_output; k++){
-                    //error otput
-                    //Err_y[k]=(t[h]-y[k])*y[k]*(1-y[k]);
-                    Err_y[k] = t[h]-y[k];
-                    sum_e += Math.pow(Err_y[k],2);
-                }
-                
-                this.MSE = 0.5*sum_e;
-                
-                //ngitung delta bias dan delta bobot
-                double Aw[][] = new double[this.w.length][this.w[0].length];
-                double Aw0[] = new double[this.w0.length];
-                for(int k=0; k<jumlah_output; k++){
-                    for(int j=0; j<jumlah_hidden; j++){
-                        //delta bobot hO
-                        Aw[k][j] = this.alfa * Err_y[k] * y[k] * z[j];
-                        //delta bias hO
-                        Aw0[k] = this.alfa * Err_y[k] * y[k];
-                    }
-                }
-                
-                //ngitung delta bias dan delta bobot
-                double Err_in[] = new double[jumlah_hidden]; 
-                double Err_z[] = new double[jumlah_hidden];
-                double Av[][] = new double[this.v.length][this.v[0].length];
-                double Av0[] = new double[this.v0.length];
-                for(int j=0; j<jumlah_hidden; j++){
-                    double tmp=0;
-                    for(int k=0; k<jumlah_output; k++){
-                        tmp = tmp + (Err_y[k]*this.w[k][j]);
-                    }
-                    // eror sebelum output / setelah hidden
-                    Err_in[j]=tmp;
-                    // eror hidden (t[h]-y[k])*y[k]*(1-y[k]);
-                    Err_z[j]=Err_in[j]*(z[j])*(1-z[j]);
+    //output
+   static String x = "";
+  //------ input
+  // Jumlah data
+  static int jumlah_data=80;
+  // Unit Input 2
+  static int unit_input=100;
+  // Unit Hidden 2
+  static int unit_hidden=2;
+  // Unit Output 1
+  static int unit_output=1;
  
-                    for(int i=0; i<jumlah_input; i++){
-                        //delta bobot iH
-                        Av[i][j]=this.alfa*Err_z[j]*this.x[h][i];
-                    }
-                    //delta bias  hidden
-                    Av0[j]=this.alfa*Err_z[j];
-                }
-                
-                //update bobot dan bias
-                //update bobot bias outpuut
-                for(int j=0; j<jumlah_hidden; j++){
-                    for(int k=0; k<jumlah_output; k++){
-                        this.w[k][j]=this.w[k][j]+Aw[k][j];
-                        //this.w[k][j]=this.w[k][j]-Aw[k][j];
-                    }
-                }
-                for(int k=0; k<jumlah_output; k++){
-                    this.w0[k]=this.w0[k]+Aw0[k];
-                    //this.w0[k]=this.w0[k]-Aw0[k];
-                }
+  final double alfa=0.05;
+  final double stopping=0.2;
+  
+  int epoch = 0;
  
-                //update bobot bias hidden
-                for(int i=0; i<jumlah_input; i++){
-                    for(int j=0; j<jumlah_hidden; j++){
-                        this.v[i][j]=this.v[i][j]+Av[i][j];
-                        //this.v[i][j]=this.v[i][j]-Av[i][j];
-                    }
-                }
-                for(int j=0; j<jumlah_hidden; j++){
-                    this.v0[j]=this.v0[j]+Av0[j];
-                    //this.v0[j]=this.v0[j]-Av0[j];
-                }
-            }
-            loop++;
-            //System.out.println("err : "+ERX);
-        }while(is_stop()>this.ERR && loop<this.maxloop);
-        this.loop = loop;
-        //System.out.println("err : "+this.MSE);
-        //System.out.println("loop : "+loop);
-    }
-    
-    double aktivasi(double inp){
-        return 1/(1+(double)Math.exp(-inp)); 
-    }
-    
-    //penentuan berhenti atau lanjut
-    double is_stop(){
-        int jumlah_input = this.unit_input;
-        int jumlah_hidden = this.unit_hidden;
-        int jumlah_output = this.unit_output;
-        int jumlah_data = this.x.length;
-        double akumY=0;
-        
-        //~ itung z_in dan z
-        for(int h=0; h<jumlah_data; h++){
-            double z[] = new double[jumlah_hidden];
-            for(int j=0; j<jumlah_hidden; j++){
-                //itung sigma xi vij
-                double z_in[] = new double[z.length];
-                double jum_xv=0;
-                for(int i=0; i<jumlah_input; i++){
-                    double tmp=this.x[h][i]*this.v[i][j];
-                    jum_xv=jum_xv+tmp;
-                }
-                z_in[j]=this.v0[j]+jum_xv;
-                z[j] = aktivasi(z_in[j]);
-                //z[j]=1/(1+(double)Math.exp(-z_in[j]));
-                //z[j]=(1-(double)Math.exp(-z_in[j]))/(1+(double)Math.exp(-z_in[j]));
-                //System.out.println(-z_in[j]);
-            }
  
-            //~ itung y_in dan y (output)
-            double y[] = new double[jumlah_output];
-            for(int k=0; k<jumlah_output; k++){
-                double y_in[] = new double[y.length];
-                double jum_zw=0;
-                for(int j=0; j<jumlah_hidden; j++){
-                    double tmp=z[j]*this.w[k][j];
-                    jum_zw=jum_zw+tmp;
-                }
-                y_in[k]=this.w0[k]+jum_zw;
-                y[k] = aktivasi(y_in[k]);
-                //y[k]=1/(1+(double)Math.exp(-y_in[k]));
-                //y[k]=(1-(double)Math.exp(-y_in[k]))/(1+(double)Math.exp(-y_in[k]));
-                //System.out.println("t[]-y = "+t);
-                akumY += Math.pow((t[h]-y[k]),2);
-            }
+  //------ hidden
+  //Unit input pada Hidden (z_in)
+  static double z_in[]=new double[unit_hidden];
+  //Input pada Hidden (z)
+  static double z[]=new double[z_in.length];
+ 
+  //Bias pada unit Hidden (bH)
+  static double v0[]=new double[unit_hidden];
+  //Delta Bias pada unit Hidden (bHx)  --- untuk perbaikan bias Hidden
+  static double v0x[]=new double[v0.length];
+  //Bobot antara Input-HIdden (v)
+  static double v[][]=new double[unit_input][unit_hidden];
+  //Delta Bobot antara Input-HIdden (vx) --- untuk perbaikan  bobot Input-Hidden
+  static double vx[][]=new double[v.length][v[0].length];
+ 
+  //Kesalahan pada setelah Hidden (Err_z)
+  static double Err_in[]=new double[unit_hidden];
+  //Kesalahan pada Hidden (Err_z)
+  static double Err_z[]=new double[unit_hidden];
+ 
+  //------ output
+  //Unit Output pada Output (y_in)
+  static double y_in[]=new double[unit_output];
+  //Output pada Output (y)
+  static double y[]=new double[y_in.length];
+ 
+  //Bias pada unit Output (bO)
+  static double w0[]=new double[unit_hidden];
+  //Delta Bias pada unit Output (bOx)  ---- untuk perbaikan bias pada Output
+  static double w0x[]=new double[w0.length];
+  //Bobot antara Hidden-Output <img class="wp-smiley emoji" draggable="false" alt="(w)" src="https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/wordpress.svg" style="height: 1em; max-height: 1em;" width="16" height="16">
+  static double w[][]=new double[unit_hidden][unit_output];
+  //Delta Bobot antara Hidden-Output (wx) --- untuk perbaikan bobot Hidden-Output
+  static double wx[][]=new double[w.length][w[0].length];
+ 
+  //Kesalahan pada Ouput (Err_y)
+  static double Err_y[]=new double[unit_output];
+ 
+  //------------- aha
+  //Minimum Error Kuadrat ERR
+  static double ERR;
+ 
+  //penentuan berhenti atau lanjut
+  double cekStop(double x[][], double v0[],double v[][],double w0[],double w[][], double t[]){
+    double akumY=0;
+    //~ itung z_in dan z
+    for(int h=0; h<jumlah_data; h++){
+     for(int j=0; j<unit_hidden; j++){
+      //itung sigma xi vij
+      double jum_xv=0;
+      for(int i=0; i<unit_input; i++){
+         double cc=x[h][i]*v[i][j];
+         jum_xv=jum_xv+cc;
+         //System.out.println(x[h][j]);
+      }
+      z_in[j]=v0[j]+jum_xv;
+      //itung z
+      z[j]=1/(1+(double)Math.exp(-z_in[j]));
+      //System.out.println(" dan z= "+z[j]);
+     }
+ 
+     //~ itung y_in dan y     (output)
+      double cxc=0;
+      for(int k=0; k<unit_output; k++){
+        double jum_zw=0;
+        for(int j=0; j<unit_hidden; j++){
+          double cc=z[j]*w[j][k];
+          jum_zw=jum_zw+cc;
         }
-        this.MSE = akumY/this.x[0].length;
-        return this.MSE;
+        y_in[k]=w0[k]+jum_zw;
+        y[k]=1/(1+(double)Math.exp(-y_in[k]));
+        akumY = akumY + Math.pow((t[h]-y[k]),2);
+        //System.out.println(t[h]+"-"+y[k]+"="+(t[k]-y[k]));
+      }
     }
-    
-    public void test(double data[]){
-        int jumlah_input = this.unit_input;
-        int jumlah_hidden = this.unit_hidden;
-        int jumlah_output = this.unit_output;
-        double outt[] = this.t;
-        
-        //pada hidden
-        double z[] = new double[jumlah_hidden];
-        for(int j=0; j<jumlah_hidden; j++){
-            double z_in[] = new double[z.length];
-            double tmp = 0;
-            for(int i=0; i<data.length; i++){
-                tmp = tmp + (data[i] * this.v[i][j]);
-            }
-            z_in[j] = this.v0[j] + tmp;
-            z[j] = aktivasi(z_in[j]);
-            //z[j] = 1/(1+(double)Math.exp(-z_in[j]));
-            //z[j] = (1-(double)Math.exp(-z_in[j]))/(1+(double)Math.exp(-z_in[j]));
+    double E = 0.5 * akumY;
+    //System.out.println(E);
+    return E;
+  }
+ 
+  public void learn(double x[][],double v0[], double v[][],double w0[],double w[][],double t[]){
+    do{
+      //~ itung z_in dan z
+      for(int h=0; h<jumlah_data; h++){
+        for(int j=0; j<unit_hidden; j++){
+          //itung sigma xi vij
+          double jum_xv=0;
+          for(int i=0; i<unit_input; i++){
+            double cc=x[h][i]*v[i][j];
+            jum_xv=jum_xv+cc;
+          }
+          z_in[j]=v0[j]+jum_xv;
+          //itung z
+          z[j]=1/(1+(double)Math.exp(-z_in[j]));
         }
  
-        //pada ouotpr
-        double y[] = new double[jumlah_output];
-        for(int k=0; k<jumlah_output; k++){
-            double y_in[] = new double[y.length];
-            double tmp = 0;
-            for(int j=0; j<jumlah_hidden; j++){
-                tmp = tmp + z[j] * this.w[k][j];
-            }
-            y_in[k] = this.w0[k] + tmp;
+        //~ itung y_in dan y     (output)
+        double cxc=0;
+        for(int k=0; k<unit_output; k++){
+          double jum_zw=0;
+          for(int j=0; j<unit_hidden; j++){
+            double cc=z[j]*w[j][k];
+            jum_zw=jum_zw+cc;
+          }
+          y_in[k]=w0[k]+jum_zw;
+          y[k]=1/(1+(double)Math.exp(-y_in[k]));
+          //System.out.println(y[k]);
+        }
+        //System.out.println(y[0]);
  
-            y[k] = aktivasi(y_in[k]);
-            //y[k] = 1/(1+(double)Math.exp(-y_in[k]));
-            //y[k] = (1-(double)Math.exp(-y_in[k]))/(1+(double)Math.exp(-y_in[k]));
-/*
-            if(y[k]<0.1){
-                y[k] = -1;
-            }else if(y[k]>0.1){
-                y[k] = 1;
-            }else{
-                y[k] = 0;
-            }
-            /*
-            if(y[k]>0)
-             y[k]=1;
-            else
-             y[k]=0;*/
-            double err_pad = this.MSE*this.x[0].length;
-            System.out.println(err_pad);
-            double hazil = 0;
-            if(y[k] < err_pad){
-                hazil = 0;
-            }else if(y[k]>(1-err_pad)){
-                hazil = 1;
-            }else{
-                hazil = 0.5;
-            }
-            
-            this.hasil_mentah = y[k];
-            this.hasil_akhir = hazil;
-            System.out.println("Output "+y[k]+"hasil : "+hazil);
+        //ngitung error output dan delta bias dan delta bobot
+        for(int k=0; k<unit_output; k++){
+          //error otput
+          Err_y[k]=(t[h]-y[k])*y[k]*(1-y[k]);
+          //System.out.println(Err_y[k]);
+ 
+          double  cc=0;
+          for(int j=0; j<unit_hidden; j++){
+            //delta bobot hO
+            wx[j][k]=alfa*Err_y[k]*z[j];
+            //delta bias hO
+            w0x[k]=alfa*Err_y[k];
+            //System.out.println("delta wx = "+wx[j][k]);
+          }
+          //System.out.println("delta w0 = "+w0x[k]);
         }
-    }
-    
-    double double_format(double num, int len){
-        String format = "#.";
-        for(int a=0; a<len; a++){
-            format += "#";
+ 
+        //ngitung error hiden dan delta bias dan delta bobot
+        for(int j=0; j<unit_hidden; j++){
+          double cc=0;
+          for(int k=0; k<unit_output; k++){
+            cc = cc + (Err_y[k]*w[j][k]);
+          }
+          // eror sebelum output / setelah hidden
+          Err_in[j]=cc;
+          //System.out.println(Err_in[j]);
+ 
+          // eror hidden               (t[h]-y[k])*y[k]*(1-y[k]);
+          Err_z[j]=Err_in[j]*(z[j])*(1-z[j]);
+          //System.out.println(Err_z[j]);
+ 
+          for(int i=0; i<unit_input; i++){
+            //delta bobot iH
+            vx[i][j]=alfa*Err_z[j]*x[h][i];
+            //System.out.println("delta vx = "+vx[i][j]);
+          }
+          //delta bias  hidden
+          v0x[j]=alfa*Err_z[j];
+          //System.out.println("delta v0 = "+v0x[j]);
+          //System.out.println(alfa+" "+Err_z[j]+" "+v0x[j]);
         }
-        DecimalFormat change = new DecimalFormat(format);
-        return Double.valueOf(change.format(num));
+ 
+        //update bobot dan bias
+        //update bobot bias outpuut
+        for(int j=0; j<unit_hidden; j++){
+          for(int k=0; k<unit_output; k++){
+            w[j][k]=w[j][k]+wx[j][k];
+            //w0[k]=w0[k]+w0x[k];
+            //System.out.println("w = "+w[j][k]);
+          }
+        }
+        for(int k=0; k<unit_output; k++){
+          //w[j][k]=w[j][k]+wx[j][k];
+          w0[k]=w0[k]+w0x[k];
+          //System.out.println("w0 = "+w0[k]);
+        }
+ 
+        //update bobot bias hidden
+        for(int i=0; i<unit_input; i++){
+          for(int j=0; j<unit_hidden; j++){
+            v[i][j]=v[i][j]+vx[i][j];
+            //v0[j]=v0[j]+v0x[j];
+            //System.out.println("v = "+v[i][j]);
+          }
+        }
+ 
+        for(int j=0; j<unit_hidden; j++){
+          //v[i][j]=v[i][j]+vx[i][j];
+          v0[j]=v0[j]+v0x[j];
+          //System.out.println("v0 = "+v0[j]);
+        }
+      }
+      epoch++;
+      System.out.println(epoch+" => "+cekStop(x,v0,v,w0,w,t));
+    }while(cekStop(x,v0,v,w0,w,t)>stopping);
+ 
+ 
+    /// bagian ini untuk ngeprint doang...
+    /// jadi dihapus gpp
+ 
+//    for(int j=0; j<unit_hidden; j++){
+//      for(int k=0; k<unit_output; k++){
+//        System.out.println("w = "+w[j][k]);
+//      }
+//    }
+//    for(int k=0; k<unit_output; k++){
+//      System.out.println("w0 = "+w0[k]);
+//    }
+//    for(int i=0; i<unit_input; i++){
+//      for(int j=0; j<unit_hidden; j++){
+//        System.out.println("v = "+v[i][j]);
+//      }
+//    }
+//    for(int j=0; j<unit_hidden; j++){
+//      System.out.println("v0 = "+v0[j]);
+//    }
+
+    System.out.println("w = "+Arrays.deepToString(w));
+    System.out.println("v = "+Arrays.deepToString(v));
+    System.out.println("w0 = "+Arrays.toString(w0));
+    System.out.println("v0 = "+Arrays.toString(v0));
+  }
+ 
+  public static void test(double inputan[], double v0[],double v[][],double w0[],double w[][], double t[])
+  {
+    //pada hidden
+    for(int j=0; j<unit_hidden; j++)
+    {
+      double cc=0;
+      for(int i=0; i<inputan.length; i++){
+        cc= cc + (inputan[i]*v[i][j]);
+      }
+      z_in[j] = v0[j] +cc;
+      z[j] = 1/(1+(double)Math.exp(-z_in[j]));
     }
-    
-    public String kesimpulan(){
-        double h = this.hasil_mentah;
-        String x = "";
+ 
+    //pada ouotpr
+    for(int k=0; k<unit_output; k++){
+      double cc = 0;
+      for(int j=0; j<unit_hidden; j++){
+        cc = cc + z[j]*w[j][k];
+      }
+      y_in[k] = w0[k]+cc;
+ 
+      double y = 1/(1+(double)Math.exp(-y_in[k]));
+      
+        double h = y;
         if(h<0.025){
             x = "Adam";
         }else if (h<0.05){
@@ -439,45 +349,14 @@ public class BP {
         }else if (h<1){
             x = "Ziya";
         }
+      System.out.println("Output "+y);
+    }
+  }
+
+    public static String getHasil() {
         return x;
     }
-    
-    
-    
-//    public static void main(String haripinter[]){
-//       BP BP = new BP();
-//       BP.init_static();
-//       BP.learn_static();
-//       double ax[] = {0.5,0.5};
-//       double bx[] = {0.5,1};
-//       double cx[] = {1,0.5};
-//       double dx[] = {1,1};
-//       BP.test(ax);
-//       BP.test(bx);
-//       BP.test(cx);
-//       BP.test(dx);
-//       
-//       double xys[][] = {{-1,0,0,0},{-1,0,0,1},{-1,0,1,0},{-1,0,1,1},{-1,1,0,0},{-1,1,0,1},{-1,1,1,0},{-1,1,1,1},{ 0,0,0,0},{ 0,0,0,1},{ 0,0,1,0},{ 0,0,1,1},{ 0,1,0,0},{ 0,1,0,1},{ 0,1,1,0},{ 0,1,1,1},{ 1,0,0,0},{ 1,0,0,1},{ 1,0,1,0},{ 1,0,1,1},{ 1,1,0,0},{ 1,1,0,1},{ 1,1,1,0},{ 1,1,1,1}};
-//    
-//       //double xys[][] = {{0,0,0,0},{0,0,0,1},{0,0,1,0},{0,0,1,1},{0,1,0,0},{0,1,0,1},{0,1,1,0},{0,1,1,1},{0.5,0,0,0},{0.5,0,0,1},{0.5,0,1,0},{0.5,0,1,1},{0.5,1,0,0},{0.5,1,0,1},{0.5,1,1,0},{0.5,1,1,1},{1,0,0,0},{1,0,0,1},{1,0,1,0},{1,0,1,1},{1,1,0,0},{1,1,0,1},{1,1,1,0},{1,1,1,1}};
-//       for(int a=0; a<xys.length; a++){
-//           double inp[] = xys[a];
-//           //System.out.println(BP.t[a]);
-//           BP.test(inp);
-//           System.out.println(BP.hasil_akhir+" = "+BP.kesimpulan(BP.hasil_akhir));
-//       }
-//       //BigDecimal k = new BigDecimal(Math.exp(10));
-//       
-//       //System.err.println(-1-(-1));
-//    }
-
-    public void setAlfa(double alfa) {
-        this.alfa = alfa;
-    }
-
-    public void setUnit_hidden(int unit_hidden) {
-        this.unit_hidden = unit_hidden;
-    }
-    
-    
+  
+  
 }
+ 

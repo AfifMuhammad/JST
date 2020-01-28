@@ -111,7 +111,6 @@ public class ClassGambar {
         FeatureExtraction fe = new FeatureExtraction();
         double[] ekstraksi = fe.zoning(p.getPixels(SourceBuffer));
         hasilEkstraksi = ekstraksi;
-        System.out.println(Arrays.toString(ekstraksi));
     }
 
 }
