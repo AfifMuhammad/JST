@@ -5,6 +5,7 @@
  */
 package com.mycompany.jst.LVQ;
 
+import com.mycompany.jst.Data;
 import java.util.Arrays;
 
 /**
