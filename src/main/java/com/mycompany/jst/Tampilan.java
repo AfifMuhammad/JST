@@ -212,7 +212,9 @@ public class Tampilan extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_backproActionPerformed
 
     private void bt_trainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_trainActionPerformed
-        
+        //bp.setAlfa(Double.valueOf(tf_alpha.getText()));
+        //bp.setUnit_hidden(Integer.valueOf(tf_hiddenLayer.getText()));
+        //bp.initRandom();
 
         //proses learning
         bp.learn();
